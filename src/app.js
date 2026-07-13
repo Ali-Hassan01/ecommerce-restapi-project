@@ -1,4 +1,5 @@
 const express = require("express");
+const errorHandler = require("./middlewares/errorHandler");
 const routes = require("./routes");
 const helmet = require("helmet");
 const requestLogger = require("./middlewares/requestLogger");
@@ -25,5 +26,8 @@ app.use(express.json());
 app.use(requestLogger);
 
 app.use("/api", routes);
+
+// Error Handler (must be last)
+app.use(errorHandler);
 
 module.exports = app;

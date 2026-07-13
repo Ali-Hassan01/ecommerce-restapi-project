@@ -9,4 +9,8 @@ router.get("/", (req, res) => {
   });
 });
 
+router.get("/error", (req, res, next) => {
+  next(new Error("Testing global error handler"));
+});
+
 module.exports = router;
