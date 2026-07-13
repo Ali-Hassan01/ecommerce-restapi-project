@@ -1,33 +1,21 @@
 const express = require("express");
-const errorHandler = require("./middlewares/errorHandler");
-const routes = require("./routes");
-const helmet = require("helmet");
-const requestLogger = require("./middlewares/requestLogger");
-const logger = require("./config/logger");
-const corsMiddleware = require("./config/cors");
 
-const ApiResponse = require("./utils/apiResponse");
+const helmet = require("helmet");
+const logger = require("./config/logger");
+const routes = require("./routes");
 
 const app = express();
 
-// Security headers
+// Security Headers
 app.use(helmet());
 
-// Cross-Origin Resource Sharing
-app.use(corsMiddleware);
-
-// Logging
+// HTTP Request Logger
 app.use(logger);
 
-// Built-in middleware
+// Parse JSON Bodies
 app.use(express.json());
 
-// Custom middleware
-app.use(requestLogger);
-
+// API Routes
 app.use("/api", routes);
-
-// Error Handler (must be last)
-app.use(errorHandler);
 
 module.exports = app;
