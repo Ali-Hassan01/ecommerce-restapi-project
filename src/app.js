@@ -1,4 +1,5 @@
 const express = require("express");
+const routes = require("./routes");
 const requestLogger = require("./middlewares/requestLogger");
 const logger = require("./config/logger");
 
@@ -15,11 +16,6 @@ app.use(express.json());
 // Custom middleware
 app.use(requestLogger);
 
-// Test Route
-app.get("/", (req, res) => {
-  const response = new ApiResponse(true, "Welcome to the E-commerce REST API");
-
-  res.status(200).json(response);
-});
+app.use("/api", routes);
 
 module.exports = app;
