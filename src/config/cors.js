@@ -1,9 +1,10 @@
 const cors = require("cors");
-const env = require("./env");
 
 const corsOptions = {
-  origin: env.nodeEnv === "development" ? "*" : ["https://yourfrontend.com"],
-
+  origin: [
+    "http://localhost:5173", // React Customer App
+    "http://localhost:5174", // React Admin Dashboard
+  ],
   credentials: true,
 };
 
