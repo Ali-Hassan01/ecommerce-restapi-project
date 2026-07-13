@@ -1,25 +1,21 @@
 const express = require("express");
-const requestLogger = require("./middlewares/requestLogger");
-const logger = require("./config/logger");
 
-const ApiResponse = require("./utils/apiResponse");
+const helmet = require("helmet");
+const logger = require("./config/logger");
+const routes = require("./routes");
 
 const app = express();
 
-// Logging
+// Security Headers
+app.use(helmet());
+
+// HTTP Request Logger
 app.use(logger);
 
-// Built-in middleware
+// Parse JSON Bodies
 app.use(express.json());
 
-// Custom middleware
-app.use(requestLogger);
-
-// Test Route
-app.get("/", (req, res) => {
-  const response = new ApiResponse(true, "Welcome to the E-commerce REST API");
-
-  res.status(200).json(response);
-});
+// API Routes
+app.use("/api", routes);
 
 module.exports = app;
