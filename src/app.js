@@ -1,9 +1,13 @@
 const express = require("express");
 const requestLogger = require("./middlewares/requestLogger");
+const logger = require("./config/logger");
 
 const ApiResponse = require("./utils/apiResponse");
 
 const app = express();
+
+// Logging
+app.use(logger);
 
 // Built-in middleware
 app.use(express.json());
