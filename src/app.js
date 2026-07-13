@@ -1,11 +1,19 @@
 const express = require("express");
 const routes = require("./routes");
+const helmet = require("helmet");
 const requestLogger = require("./middlewares/requestLogger");
 const logger = require("./config/logger");
+const corsMiddleware = require("./config/cors");
 
 const ApiResponse = require("./utils/apiResponse");
 
 const app = express();
+
+// Security headers
+app.use(helmet());
+
+// Cross-Origin Resource Sharing
+app.use(corsMiddleware);
 
 // Logging
 app.use(logger);
