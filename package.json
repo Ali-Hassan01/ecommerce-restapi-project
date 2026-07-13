@@ -1,0 +1,35 @@
+{
+  "name": "ecommerce-restapi-project",
+  "version": "1.0.0",
+  "description": "Production-ready E-commerce Backend REST API built with Node.js, Express, MongoDB, JWT, Docker, Redis, AWS S3, and modern backend architecture.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "test": "echo \"Tests will be added later\""
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "rest-api",
+    "ecommerce"
+  ],
+  "author": "Ali Hassan",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.5"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}
