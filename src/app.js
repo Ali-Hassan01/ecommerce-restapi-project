@@ -1,13 +1,21 @@
 const express = require("express");
+const requestLogger = require("./middlewares/requestLogger");
+
+const ApiResponse = require("./utils/apiResponse");
 
 const app = express();
 
+// Built-in middleware
+app.use(express.json());
+
+// Custom middleware
+app.use(requestLogger);
+
 // Test Route
 app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "Welcome to the E-commerce REST API",
-  });
+  const response = new ApiResponse(true, "Welcome to the E-commerce REST API");
+
+  res.status(200).json(response);
 });
 
 module.exports = app;
