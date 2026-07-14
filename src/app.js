@@ -5,6 +5,7 @@ const rateLimiter = require("./config/rateLimiter");
 const logger = require("./config/logger");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/errorHandler");
+const AppError = require("./utils/AppError");
 
 const app = express();
 
@@ -25,6 +26,10 @@ app.use(express.json());
 
 // API Routes
 app.use("/api", routes);
+
+app.use((req, res, next) => {
+  next(new AppError(`Route '${req.originalUrl}' not found.`, 404));
+});
 
 // Global Error Handler (must be last)
 app.use(errorHandler);
