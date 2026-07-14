@@ -1,5 +1,6 @@
 const express = require("express");
 const AppError = require("../../utils/AppError");
+const { testError } = require("../../controllers/test.controller");
 
 const authRoutes = require("./auth.routes");
 const userRoutes = require("./user.routes");
@@ -21,9 +22,7 @@ const router = express.Router();
 //   });
 // });
 
-router.get("/", (req, res, next) => {
-  next(new AppError("Testing AppError", 404));
-});
+router.get("/", testError);
 
 // Feature Routes
 router.use("/auth", authRoutes);
