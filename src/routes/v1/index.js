@@ -1,4 +1,5 @@
 const express = require("express");
+const AppError = require("../../utils/AppError");
 
 const authRoutes = require("./auth.routes");
 const userRoutes = require("./user.routes");
@@ -13,11 +14,15 @@ const couponRoutes = require("./coupon.routes");
 const router = express.Router();
 
 // Version 1 Root
-router.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "API v1 is running successfully.",
-  });
+// router.get("/", (req, res) => {
+//   res.status(200).json({
+//     success: true,
+//     message: "API v1 is running successfully.",
+//   });
+// });
+
+router.get("/", (req, res, next) => {
+  next(new AppError("Testing AppError", 404));
 });
 
 // Feature Routes
