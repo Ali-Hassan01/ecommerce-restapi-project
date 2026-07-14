@@ -3,10 +3,7 @@ class ApiResponse {
     this.success = success;
     this.message = message;
     this.data = data;
-
-    if (meta) {
-      this.meta = meta;
-    }
+    this.meta = meta;
   }
 }
 

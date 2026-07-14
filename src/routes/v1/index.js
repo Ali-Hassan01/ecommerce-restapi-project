@@ -1,6 +1,6 @@
 const express = require("express");
 const AppError = require("../../utils/AppError");
-const { testError } = require("../../controllers/test.controller");
+const { testSuccess } = require("../../controllers/test.controller");
 
 const authRoutes = require("./auth.routes");
 const userRoutes = require("./user.routes");
@@ -22,7 +22,7 @@ const router = express.Router();
 //   });
 // });
 
-router.get("/", testError);
+router.get("/", testSuccess);
 
 // Feature Routes
 router.use("/auth", authRoutes);

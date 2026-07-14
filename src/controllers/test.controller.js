@@ -1,10 +1,15 @@
 const asyncHandler = require("../utils/asyncHandler");
-const AppError = require("../utils/AppError");
+const ApiResponse = require("../utils/ApiResponse");
 
-const testError = asyncHandler(async (req, res) => {
-  throw new AppError("Async Handler is working!", 400);
+const testSuccess = asyncHandler(async (req, res) => {
+  const response = new ApiResponse(true, "API is working successfully.", {
+    project: "E-commerce REST API",
+    version: "v1",
+  });
+
+  res.status(200).json(response);
 });
 
 module.exports = {
-  testError,
+  testSuccess,
 };
