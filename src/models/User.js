@@ -56,5 +56,20 @@ userSchema.post("save", function (doc) {
   console.log(`User ${doc.email} saved successfully.`);
 });
 
+userSchema.methods.getPublicProfile = function () {
+  return {
+    id: this._id,
+    name: this.name,
+    email: this.email,
+    role: this.role,
+  };
+};
+
+userSchema.statics.findByEmail = function (email) {
+  return this.findOne({
+    email: email.toLowerCase(),
+  });
+};
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
