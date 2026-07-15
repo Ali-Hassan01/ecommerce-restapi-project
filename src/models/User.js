@@ -46,5 +46,15 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.pre("save", function (next) {
+  console.log("Pre-save hook executed.");
+
+  next();
+});
+
+userSchema.post("save", function (doc) {
+  console.log(`User ${doc.email} saved successfully.`);
+});
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
