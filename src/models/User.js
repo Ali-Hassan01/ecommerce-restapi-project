@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
@@ -43,11 +44,24 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      versionKey: false,
+      transform(doc, ret) {
+        delete ret.password;
+        return ret;
+      },
+    },
   }
 );
 
-userSchema.pre("save", function (next) {
-  console.log("Pre-save hook executed.");
+userSchema.pre("save", async function (next) {
+  // Don't hash again if password wasn't changed
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  this.password = await bcrypt.hash(this.password, 10);
 
   next();
 });
@@ -65,11 +79,19 @@ userSchema.methods.getPublicProfile = function () {
   };
 };
 
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
 userSchema.statics.findByEmail = function (email) {
   return this.findOne({
     email: email.toLowerCase(),
   });
 };
+
+userSchema.virtual("fullInfo").get(function () {
+  return `${this.name} (${this.role})`;
+});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
