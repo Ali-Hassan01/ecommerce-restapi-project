@@ -1,5 +1,4 @@
 const express = require("express");
-const AppError = require("../../utils/AppError");
 const { testSuccess } = require("../../controllers/test.controller");
 
 const authRoutes = require("./auth.routes");
