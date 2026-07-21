@@ -19,6 +19,25 @@ const registerUser = async ({ name, email, password }) => {
   return user;
 };
 
+const loginUser = async ({ email, password }) => {
+  // Find user by email
+  const user = await User.findByEmail(email);
+
+  if (!user) {
+    throw new AppError("Invalid email or password.", 401);
+  }
+
+  // Compare password
+  const isPasswordCorrect = await user.comparePassword(password);
+
+  if (!isPasswordCorrect) {
+    throw new AppError("Invalid email or password.", 401);
+  }
+
+  return user;
+};
+
 module.exports = {
   registerUser,
+  loginUser,
 };

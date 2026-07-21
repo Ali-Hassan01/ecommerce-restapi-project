@@ -21,6 +21,24 @@ const register = asyncHandler(async (req, res) => {
   res.status(201).json(response);
 });
 
+const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new AppError("Email and password are required.", 400);
+  }
+
+  const user = await authService.loginUser({
+    email,
+    password,
+  });
+
+  const response = new ApiResponse(true, "Login credentials verified.", user.getPublicProfile());
+
+  res.status(200).json(response);
+});
+
 module.exports = {
   register,
+  login,
 };
