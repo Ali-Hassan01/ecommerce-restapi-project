@@ -1,6 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler");
 const ApiResponse = require("../utils/ApiResponse");
 const AppError = require("../utils/AppError");
+const authService = require("../services/auth.service");
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -9,12 +10,15 @@ const register = asyncHandler(async (req, res) => {
     throw new AppError("Name, email and password are required.", 400);
   }
 
-  const response = new ApiResponse(true, "Validation successful.", {
+  const user = await authService.registerUser({
     name,
     email,
+    password,
   });
 
-  res.status(200).json(response);
+  const response = new ApiResponse(true, "User registered successfully.", user.getPublicProfile());
+
+  res.status(201).json(response);
 });
 
 module.exports = {
