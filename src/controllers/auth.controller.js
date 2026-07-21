@@ -28,12 +28,15 @@ const login = asyncHandler(async (req, res) => {
     throw new AppError("Email and password are required.", 400);
   }
 
-  const user = await authService.loginUser({
+  const { user, token } = await authService.loginUser({
     email,
     password,
   });
 
-  const response = new ApiResponse(true, "Login credentials verified.", user.getPublicProfile());
+  const response = new ApiResponse(true, "Login successful.", {
+    user: user.getPublicProfile(),
+    token,
+  });
 
   res.status(200).json(response);
 });

@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const AppError = require("../utils/AppError");
+const { generateToken } = require("../utils/jwt");
 
 const registerUser = async ({ name, email, password }) => {
   // Check if email already exists
@@ -33,8 +34,12 @@ const loginUser = async ({ email, password }) => {
   if (!isPasswordCorrect) {
     throw new AppError("Invalid email or password.", 401);
   }
+  const token = generateToken(user._id);
 
-  return user;
+  return {
+    user,
+    token,
+  };
 };
 
 module.exports = {
