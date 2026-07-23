@@ -93,7 +93,23 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
   res.status(200).json(response);
 });
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
 
+  if (!newPassword) {
+    throw new AppError("New password is required.", 400);
+  }
+
+  const result = await authService.resetPassword(token, newPassword);
+
+  const response = new ApiResponse(true, "Password reset successfully.", {
+    user: result.user.getPublicProfile(),
+    token: result.token,
+  });
+
+  res.status(200).json(response);
+});
 module.exports = {
   register,
   login,
@@ -101,4 +117,5 @@ module.exports = {
   updateProfile,
   changePassword,
   forgotPassword,
+  resetPassword,
 };
