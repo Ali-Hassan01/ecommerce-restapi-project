@@ -68,9 +68,42 @@ const updateProfile = async (userId, updateData) => {
   return user;
 };
 
+const changePassword = async (userId, currentPassword, newPassword) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+
+  const isCurrentPasswordCorrect = await user.comparePassword(currentPassword);
+
+  if (!isCurrentPasswordCorrect) {
+    throw new AppError("Current password is incorrect.", 401);
+  }
+
+  const isSamePassword = await user.comparePassword(newPassword);
+
+  if (isSamePassword) {
+    throw new AppError("New password must be different from the current password.", 400);
+  }
+
+  user.password = newPassword;
+
+  // pre("save") middleware will hash it automatically
+  await user.save();
+
+  const token = generateToken(user._id);
+
+  return {
+    user,
+    token,
+  };
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getCurrentUser,
   updateProfile,
+  changePassword,
 };

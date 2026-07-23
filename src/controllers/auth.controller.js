@@ -57,9 +57,31 @@ const updateProfile = asyncHandler(async (req, res) => {
   res.status(200).json(response);
 });
 
+const changePassword = asyncHandler(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    throw new AppError("Current password and new password are required.", 400);
+  }
+
+  const { user, token } = await authService.changePassword(
+    req.user._id,
+    currentPassword,
+    newPassword
+  );
+
+  const response = new ApiResponse(true, "Password changed successfully.", {
+    user: user.getPublicProfile(),
+    token,
+  });
+
+  res.status(200).json(response);
+});
+
 module.exports = {
   register,
   login,
   me,
   updateProfile,
+  changePassword,
 };
