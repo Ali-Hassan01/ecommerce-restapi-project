@@ -78,10 +78,27 @@ const changePassword = asyncHandler(async (req, res) => {
   res.status(200).json(response);
 });
 
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new AppError("Email is required.", 400);
+  }
+
+  const resetToken = await authService.forgotPassword(email);
+
+  const response = new ApiResponse(true, "Password reset token generated.", {
+    resetToken,
+  });
+
+  res.status(200).json(response);
+});
+
 module.exports = {
   register,
   login,
   me,
   updateProfile,
   changePassword,
+  forgotPassword,
 };

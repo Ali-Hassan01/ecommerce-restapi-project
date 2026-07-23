@@ -99,6 +99,21 @@ const changePassword = async (userId, currentPassword, newPassword) => {
     token,
   };
 };
+const forgotPassword = async (email) => {
+  const user = await User.findByEmail(email);
+
+  if (!user) {
+    throw new AppError("No user found with that email.", 404);
+  }
+
+  const resetToken = user.createPasswordResetToken();
+
+  await user.save({
+    validateBeforeSave: false,
+  });
+
+  return resetToken;
+};
 
 module.exports = {
   registerUser,
@@ -106,4 +121,5 @@ module.exports = {
   getCurrentUser,
   updateProfile,
   changePassword,
+  forgotPassword,
 };
