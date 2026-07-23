@@ -41,7 +41,16 @@ const login = asyncHandler(async (req, res) => {
   res.status(200).json(response);
 });
 
+const me = asyncHandler(async (req, res) => {
+  const user = await authService.getCurrentUser(req.user._id);
+
+  const response = new ApiResponse(true, "Profile fetched successfully.", user.getPublicProfile());
+
+  res.status(200).json(response);
+});
+
 module.exports = {
   register,
   login,
+  me,
 };

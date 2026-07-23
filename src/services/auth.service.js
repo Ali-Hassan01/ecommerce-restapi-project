@@ -42,7 +42,18 @@ const loginUser = async ({ email, password }) => {
   };
 };
 
+const getCurrentUser = async (userId) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+
+  return user;
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  getCurrentUser,
 };
