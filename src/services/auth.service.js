@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const AppError = require("../utils/AppError");
 const { generateToken } = require("../utils/jwt");
+const filterObject = require("../utils/filterObject");
 
 const registerUser = async ({ name, email, password }) => {
   // Check if email already exists
@@ -52,8 +53,24 @@ const getCurrentUser = async (userId) => {
   return user;
 };
 
+const updateProfile = async (userId, updateData) => {
+  const filteredData = filterObject(updateData, "name", "phone", "avatar");
+
+  const user = await User.findByIdAndUpdate(userId, filteredData, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+
+  return user;
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getCurrentUser,
+  updateProfile,
 };

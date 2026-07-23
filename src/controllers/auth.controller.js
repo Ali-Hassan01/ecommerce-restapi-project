@@ -49,8 +49,17 @@ const me = asyncHandler(async (req, res) => {
   res.status(200).json(response);
 });
 
+const updateProfile = asyncHandler(async (req, res) => {
+  const user = await authService.updateProfile(req.user._id, req.body);
+
+  const response = new ApiResponse(true, "Profile updated successfully.", user.getPublicProfile());
+
+  res.status(200).json(response);
+});
+
 module.exports = {
   register,
   login,
   me,
+  updateProfile,
 };
