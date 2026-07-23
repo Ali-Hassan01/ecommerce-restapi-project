@@ -18,8 +18,15 @@ const registerUser = async ({ name, email, password }) => {
     email,
     password,
   });
+  const verificationToken = user.createEmailVerificationToken();
+  await user.save({
+    validateBeforeSave: false,
+  });
 
-  return user;
+  return {
+    user,
+    verificationToken,
+  };
 };
 
 const loginUser = async ({ email, password }) => {
@@ -151,6 +158,32 @@ const resetPassword = async (token, newPassword) => {
   };
 };
 
+const verifyEmail = async (token) => {
+  const crypto = require("crypto");
+
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await User.findOne({
+    emailVerificationToken: hashedToken,
+    emailVerificationExpires: {
+      $gt: Date.now(),
+    },
+  });
+
+  if (!user) {
+    throw new AppError("Verification token is invalid or expired.", 400);
+  }
+
+  user.isVerified = true;
+
+  user.emailVerificationToken = undefined;
+  user.emailVerificationExpires = undefined;
+
+  await user.save();
+
+  return user;
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -159,4 +192,5 @@ module.exports = {
   changePassword,
   forgotPassword,
   resetPassword,
+  verifyEmail,
 };

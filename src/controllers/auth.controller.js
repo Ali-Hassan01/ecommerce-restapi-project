@@ -10,15 +10,28 @@ const register = asyncHandler(async (req, res) => {
     throw new AppError("Name, email and password are required.", 400);
   }
 
-  const user = await authService.registerUser({
+  const { user, verificationToken } = await authService.registerUser({
     name,
     email,
     password,
   });
 
-  const response = new ApiResponse(true, "User registered successfully.", user.getPublicProfile());
+  const response = new ApiResponse(true, "User registered successfully.", {
+    user: user.getPublicProfile(),
+    verificationToken,
+  });
 
   res.status(201).json(response);
+});
+
+const verifyEmail = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+
+  const user = await authService.verifyEmail(token);
+
+  res
+    .status(200)
+    .json(new ApiResponse(true, "Email verified successfully.", user.getPublicProfile()));
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -118,4 +131,5 @@ module.exports = {
   changePassword,
   forgotPassword,
   resetPassword,
+  verifyEmail,
 };

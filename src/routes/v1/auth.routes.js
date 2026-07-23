@@ -7,11 +7,13 @@ const {
   changePassword,
   forgotPassword,
   resetPassword,
+  verifyEmail,
 } = require("../../controllers/auth.controller");
 const { protect, authorize } = require("../../middlewares/auth.middleware");
 
 const router = express.Router();
 router.post("/register", register);
+router.patch("/verify-email/:token", verifyEmail);
 router.post("/login", login);
 router.get("/me", protect, me);
 router.patch("/profile", protect, updateProfile);

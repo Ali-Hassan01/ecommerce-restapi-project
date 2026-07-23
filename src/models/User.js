@@ -30,6 +30,12 @@ const userSchema = new mongoose.Schema(
     passwordResetExpires: {
       type: Date,
     },
+    emailVerificationToken: {
+      type: String,
+    },
+    emailVerificationExpires: {
+      type: Date,
+    },
     role: {
       type: String,
       enum: ["customer", "admin"],
@@ -99,6 +105,16 @@ userSchema.methods.createPasswordResetToken = function () {
 
   // Return the plain token
   return resetToken;
+};
+
+userSchema.methods.createEmailVerificationToken = function () {
+  const verificationToken = crypto.randomBytes(32).toString("hex");
+
+  this.emailVerificationToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
+
+  this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+  return verificationToken;
 };
 
 userSchema.statics.findByEmail = function (email) {
